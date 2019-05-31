@@ -1,13 +1,11 @@
-let artifacts = [];
+document.getElementById('cancel-order').onclick = cancelOrderOnce;
 
-document.getElementById('once').onclick = once;
+let cancelOrderArtifactNum = 0;
 
-let artifactNum = 0;
-
-function once() {
-    let artifact = new Artifact();
+function cancelOrderOnce() {
+    let artifact = new Artifact('cancel-order');
     artifacts.push(artifact);
-    artifact.id = ++artifactNum;
+    artifact.id = ++cancelOrderArtifactNum;
     writeWhiteBoard('#' + artifact.id + ' --- BEGIN ---\n');
     createOrderCancel(artifact);
 }
@@ -122,17 +120,3 @@ function createCancelFulfillment(artifact) {
     });
     artifact.msgs.push(cancelFulfillment);
 }
-
-document.getElementById('pause-control').onclick = () => document.getElementById('pause-control-checkbox').click();
-
-setInterval(() => {
-    if (!document.getElementById('pause-control-checkbox').checked) {
-        drawBg();
-        for (let i of artifacts) {
-            if (i.alive) {
-                i.draw();
-                i.update();
-            }
-        }
-    }
-}, 20);

@@ -217,7 +217,7 @@ class Message {
 
 class Artifact {
 
-    constructor() {
+    constructor(artifactName) {
         this.alive = true;
         this.color = '#' + parseInt('' + Math.random() * 1000000);
         const shapesDrawer = [
@@ -231,7 +231,16 @@ class Artifact {
                 new Triangle(curX, curY, 20, this.color).draw();
             }
         ];
-        this.shapeDraw = shapesDrawer[parseInt('' + Math.random() * 1000) % shapesDrawer.length];
+        switch (artifactName) {
+            case 'cancel-order':
+                this.shapeDraw = shapesDrawer[1];
+                break;
+            case 'create-order':
+                this.shapeDraw = shapesDrawer[2];
+                break;
+            case 'deliver':
+                this.shapeDraw = shapesDrawer[0];
+        }
         this.msgs = [];
     }
 
@@ -276,4 +285,20 @@ function drawBg() {
     }
 }
 
+document.getElementById('pause-control').onclick = () => document.getElementById('pause-control-checkbox').click();
+
 drawBg();
+
+let artifacts = [];
+
+setInterval(() => {
+    if (!document.getElementById('pause-control-checkbox').checked) {
+        drawBg();
+        for (let i of artifacts) {
+            if (i.alive) {
+                i.draw();
+                i.update();
+            }
+        }
+    }
+}, 20);
